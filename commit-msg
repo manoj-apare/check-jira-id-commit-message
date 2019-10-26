@@ -1,0 +1,64 @@
+#/bin/bash
+
+# Redirect output to stderr.
+exec 1>&2
+
+# Color codes
+red=`tput setaf 1`
+green=`tput setaf 2`
+blue=`tput setaf 4`
+reset=`tput sgr0`
+
+# Notification
+echo  "${blue}"
+echo "# Running commit-msg git hook."
+echo "======================================${reset}"
+echo ""
+
+# Regex pattern for JIRA ID
+REGEX_ISSUE_ID="[a-zA-Z0-9\_\-]+-[0-9]+|merge"
+
+# Get branch name
+BRANCH_NAME=$(git symbolic-ref --short HEAD)
+
+# Exit if no branch_name found.
+if [[ -z "$BRANCH_NAME" ]]; then
+  echo  "${red}"
+  echo "Brach name not found";
+  echo "====================${reset}"
+  echo ""
+  exit 1
+fi
+
+# Extract issue id from branch name
+ISSUE_ID=$(echo "$BRANCH_NAME" | grep -o -E "$REGEX_ISSUE_ID")
+if [[ -z "$ISSUE_ID" ]]; then
+  if cat $1 | grep -qE "$REGEX_ISSUE_ID"; then
+    echo  "${red}"
+    echo "Git commit aborted. Remove Jira issue ID, since branch name doesn't have Jira issue id";
+    echo "======================================================================================${reset}"
+    echo ""
+    exit 1
+  else
+    echo  "${green}"
+    echo "Git commit resumed";
+    echo "==================${reset}"
+    echo ""
+    exit 0
+  fi
+else
+  # Check Jira ID in commit message
+  if cat $1 | grep -q "$ISSUE_ID"; then
+    echo  "${green}"
+    echo "Git commit resumed. Jira Issue ID found in commit message";
+    echo "=========================================================${reset}"
+    echo ""
+    exit 0
+  else
+    echo  "${red}"
+    echo "Git commit aborted. Please add Jira Issue ID to commit message";
+    echo "==============================================================${reset}"
+    echo ""
+    exit 1
+  fi
+fi
