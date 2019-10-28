@@ -11,3 +11,4 @@ Clone or download the `commit-msg` file and place it to your repository `.git/ho
 # Success cases
 1. Branch name with Jira ID and Commit message with Jira ID
 1. Branch name without Jira ID and Commit message without Jira ID
+1. Branch name with/without Jira ID and Commit message having `merge conflict` keyword.
