@@ -16,7 +16,7 @@ echo "======================================${reset}"
 echo ""
 
 # Regex pattern for JIRA ID
-REGEX_ISSUE_ID="[a-zA-Z0-9\_\-]+-[0-9]+|merge"
+REGEX_ISSUE_ID="[a-zA-Z0-9\_\-]+-[0-9]+"
 
 # Get branch name
 BRANCH_NAME=$(git symbolic-ref --short HEAD)
@@ -52,6 +52,12 @@ else
     echo  "${green}"
     echo "Git commit resumed. Jira Issue ID found in commit message";
     echo "=========================================================${reset}"
+    echo ""
+    exit 0
+  elif cat $1 | grep -q "merge conflict"; then
+    echo  "${green}"
+    echo "Git commit resumed. Merge conflict keyword found in commit message";
+    echo "==================================================================${reset}"
     echo ""
     exit 0
   else
