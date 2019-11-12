@@ -48,7 +48,7 @@ if [[ -z "$ISSUE_ID" ]]; then
   fi
 else
   # Check Jira ID in commit message
-  if cat $1 | grep -q "$ISSUE_ID"; then
+  if cat $1 | grep -q "$ISSUE_ID "; then
     echo  "${green}"
     echo "Git commit resumed. Jira Issue ID found in commit message";
     echo "=========================================================${reset}"
