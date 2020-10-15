@@ -16,7 +16,7 @@ echo "======================================${reset}"
 echo ""
 
 # Regex pattern for JIRA ID
-REGEX_ISSUE_ID="[a-zA-Z\_\-]+-[0-9]+"
+REGEX_ISSUE_ID="[a-zA-Z\_]+-[0-9]+"
 
 # Get branch name
 BRANCH_NAME=$(git symbolic-ref --short HEAD)
